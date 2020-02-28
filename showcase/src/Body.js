@@ -120,12 +120,12 @@ const RouteComponent = ({ pattern, patternNumber, isMediumOrLarger }) => {
   // Demo to be shown in Display Boxes
   let Demo1, Demo2;
   try {
-    Demo1 = require(`./patterns/${beforeAndAfterPatternNumbers[0]}`).default;
+    Demo1 = require(`./patterns/${beforeAndAfterPatternNumbers[0]}.jsx`).default;
   } catch (error) {
     Demo1 = () => null;
   }
   try {
-    Demo2 = require(`./patterns/${beforeAndAfterPatternNumbers[1]}`).default;
+    Demo2 = require(`./patterns/${beforeAndAfterPatternNumbers[1]}.jsx`).default;
   } catch (error) {
     Demo2 = () => null;
   }

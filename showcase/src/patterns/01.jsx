@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import mojs from 'mo-js';
 import styles from './index.css';
 
@@ -14,10 +14,11 @@ const initialState = {
 const withClapAnimation = (WrappedComponent) => {
   const WithClapAnimation = (props) => {
     const [animationTimeline, setAnimationTimeline] = useState(new mojs.Timeline());
+    const moRef = useRef();
 
     useEffect(() => {
       const scaleButton = new mojs.Html({
-        el: '#clap',
+        el: moRef.current,
         duration: 300,
         scale: { 1.3: 1 },
         easing: mojs.easing.ease.out,
@@ -27,19 +28,21 @@ const withClapAnimation = (WrappedComponent) => {
       setAnimationTimeline(newAnimationTimeline);
     }, [animationTimeline]);
 
-    return <WrappedComponent {...props} animationTimeline={animationTimeline} />;
+    const animationProps = { timeline: animationTimeline, targetRef: moRef };
+
+    return <WrappedComponent {...props} clapAnimation={animationProps} />;
   };
 
   return WithClapAnimation;
 };
 
-const MediumClap = ({ animationTimeline }) => {
+const MediumClap = ({ clapAnimation }) => {
   const MAXIMUM_USER_CLAPS = 10;
   const [clapState, setClapState] = useState(initialState);
   const { count, countTotal, isClicked } = clapState;
 
   const handleClapClick = () => {
-    animationTimeline.replay();
+    clapAnimation.timeline.replay();
     setClapState((state) => {
       const count = Math.min(state.count + 1, MAXIMUM_USER_CLAPS);
       const countTotal = state.count < MAXIMUM_USER_CLAPS ? state.countTotal + 1 : state.countTotal;
@@ -53,7 +56,7 @@ const MediumClap = ({ animationTimeline }) => {
   };
 
   return (
-    <button id="clap" onClick={handleClapClick} className={styles.clap} type="button">
+    <button ref={clapAnimation.targetRef} onClick={handleClapClick} className={styles.clap} type="button">
       <ClapIcon isClicked={isClicked} />
       <ClapCount count={count} />
       <CountTotal countTotal={countTotal} />
