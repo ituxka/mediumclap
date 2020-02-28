@@ -1,30 +1,30 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: './src/index.js',
+  entry: "./src/index.js",
   output: {
-    filename: 'app.bundle.js',
-    path: path.join(__dirname, 'dist'),
-    publicPath: '/'
+    filename: "app.bundle.js",
+    path: path.join(__dirname, "dist"),
+    publicPath: "/"
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
+        test: /\.jsx?$/,
+        loader: "babel-loader",
         exclude: /node_modules/,
         options: {
-          presets: ['@babel/preset-env', '@babel/preset-react'],
-          plugins: ['@babel/plugin-proposal-class-properties']
+          presets: ["@babel/preset-env", "@babel/preset-react"],
+          plugins: ["@babel/plugin-proposal-class-properties"]
         }
       },
       {
         test: /\.css$/,
         use: [
-          'style-loader',
+          "style-loader",
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               importLoaders: 1,
               modules: true
@@ -35,17 +35,17 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif)$/,
-        use: ['file-loader']
+        use: ["file-loader"]
       },
       {
         test: /\.svg$/,
-        use: ['@svgr/webpack']
+        use: ["@svgr/webpack"]
       }
     ]
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/public/index.html'
+      template: "./src/public/index.html"
     })
   ]
-}
+};
