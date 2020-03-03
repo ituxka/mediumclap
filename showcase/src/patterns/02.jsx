@@ -42,7 +42,7 @@ const MediumClap = () => {
  * subcomponents
  */
 
-const ClapIcon = ({ isClicked }) => {
+const ClapIcon = React.memo(({ isClicked }) => {
   return (
     <span>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="-549 338 100.1 125" className={`${styles.icon} ${isClicked && styles.checked}`}>
@@ -51,7 +51,7 @@ const ClapIcon = ({ isClicked }) => {
       </svg>
     </span>
   );
-};
+});
 
 const ClapCount = React.forwardRef(({ count }, ref) => {
   return (
