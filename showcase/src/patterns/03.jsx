@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './index.css';
 import { useClapAnimation3 } from '../hooks';
 
@@ -11,11 +11,20 @@ const initialState = {
 const MediumClapContext = createContext();
 const { Provider } = MediumClapContext;
 
-const MediumClap = ({ children }) => {
+const MediumClap = ({ children, onClap }) => {
   const MAXIMUM_USER_CLAPS = 10;
   const [clapState, setClapState] = useState(initialState);
 
   const clapAnimation = useClapAnimation3();
+
+  const componentJustMounted = useRef(true);
+  useEffect(() => {
+    if (!componentJustMounted.current) {
+      onClap && onClap(clapState);
+    }
+
+    componentJustMounted.current = false;
+  }, [clapState, onClap]);
 
   const handleClapClick = () => {
     clapAnimation.timeline.replay();
@@ -77,12 +86,20 @@ const ClapCountTotal = () => {
 };
 
 const Usage = () => {
+  const [count, setCount] = useState(0);
+  const handleClap = (clapState) => {
+    setCount(clapState.count);
+  };
+
   return (
-    <MediumClap>
-      <ClapIcon />
-      <ClapCount />
-      <ClapCountTotal />
-    </MediumClap>
+    <div style={{ width: '100%' }}>
+      <MediumClap onClap={handleClap}>
+        <ClapIcon />
+        <ClapCount />
+        <ClapCountTotal />
+      </MediumClap>
+      <div className={styles.info}>{`You've clicked ${count} times!`}</div>
+    </div>
   );
 };
 
